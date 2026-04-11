@@ -14,4 +14,5 @@ console.log(os.totalmem());
 console.log(os.cpus());
 
 const fs = require('fs');
-console.log(fs);
+const content = fs.readFileSync('01_Modules/data.txt', 'utf-8');
+console.log(content);
