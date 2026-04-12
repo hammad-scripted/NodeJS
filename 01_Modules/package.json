@@ -1,0 +1,14 @@
+{
+  "name": "01_modules",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hammad",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/node": "^25.6.0"
+  }
+}
