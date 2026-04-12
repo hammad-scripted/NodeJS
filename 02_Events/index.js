@@ -26,3 +26,18 @@ emitter2.once('Welcome', () => {
 // emit the event but it will only be listened to once
 emitter2.emit('Welcome');
 emitter2.emit('Welcome'); // it will not be listened to because it was already listened to once
+
+const emitter3 = new EventEmitter();
+const callback = (data) => {
+  console.log('data is ', data);
+};
+emitter3.on('data', callback);
+
+emitter3.emit('data', { name: 'Hammad', age: 25 });
+
+emitter3.emit('data', { name: 'John', age: 30 }); // it will still be listened to because we did not remove the listener correctly
+
+emitter3.emit('data', { name: 'John', age: 30 }); // it will still be listened to because we did not remove the listener correctly
+emitter3.off('data', callback); // this will remove the listener for the 'data' event
+
+emitter3.emit('data', { name: 'John', age: 30 }); // it will not be listened to because we removed the listener for the 'data' event
