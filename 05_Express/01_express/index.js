@@ -1,5 +1,7 @@
 const colors = require('colors');
 const express = require('express');
+// // express module returns a express function
+//// app is an object , express() means we are calling a function
 
 const app = express();
 
