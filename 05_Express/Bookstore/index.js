@@ -1,5 +1,6 @@
 const colors = require('colors');
 const PORT = 8000;
+const fs = require('node:fs');
 const express = require('express');
 
 const app = express();
@@ -11,8 +12,17 @@ const books = [
 ];
 
 // ! middleware
-
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log('I am Middleware A');
+  next();
+});
+app.use((req, res, next) => {
+  const log = `\n[${Date.now}] ${req.method} ${req.url} ${req.path}`;
+  fs.appendFileSync('logs.txt', log, 'utf-8');
+  next();
+});
+
 app.get('/books', (req, res) => {
   res.json(books);
 });
