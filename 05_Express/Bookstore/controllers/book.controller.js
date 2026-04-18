@@ -1,5 +1,5 @@
-import { booksTable } from '../models';
-import { db } from '../drizzle';
+import { booksTable } from '../models/book-model.js';
+import db from '../db/index.js';
 import { eq } from 'drizzle-orm';
 export const getAllBooks = async (req, res) => {
   try {
@@ -17,10 +17,12 @@ export const getBookById = async (req, res) => {
     const book = await db
       .select()
       .from(booksTable)
-      .where((table) => eq(table.id, id))
+      .where(eq(booksTable.id, id))
       .limit(1);
-    if (!book) {
-      return res.status().json({ error: `Book with id:${id} does not exist!` });
+    if (book.length === 0) {
+      return res
+        .status(404)
+        .json({ error: `Book with id:${id} does not exist!` });
     } else {
       return res
         .status(200)
@@ -66,7 +68,7 @@ export const deleteBook = async (req, res) => {
   try {
     const deletedBook = await db
       .delete(booksTable)
-      .where((table) => eq(table.id, id))
+      .where(eq(booksTable.id, id))
       .returning({ id: booksTable.id });
     if (deletedBook.length === 0) {
       return res
