@@ -15,22 +15,24 @@ export const getAllBooks = async (req, res) => {
             sql`to_tsvector('english', ${booksTable.title}) @@ to_tsquery('english', ${searchQuery}) OR to_tsvector('english', ${booksTable.description}) @@ to_tsquery('english', ${searchQuery})`,
           );
         if (books.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             message: `No books found matching the search query: ${searchQuery}`,
           });
         } else {
-          res.json(books);
+          return res.json(books);
         }
       } catch (error) {
         console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
       }
     }
   } else {
     try {
       const books = await db.select().from(booksTable);
-      res.json(books);
+      return res.json(books);
     } catch (err) {
       console.log(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 };
@@ -55,6 +57,7 @@ export const getBookById = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
