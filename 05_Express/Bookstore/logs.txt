@@ -26,3 +26,12 @@
 [function now() { [native code] }] DELETE /books/4ea74672-d011-4e58-b834-eb9e07dc3f3d /books/4ea74672-d011-4e58-b834-eb9e07dc3f3d
 [function now() { [native code] }] DELETE /books/4ea74672-d011-4e58-b834-eb9e07dc3f3d /books/4ea74672-d011-4e58-b834-eb9e07dc3f3d
 [function now() { [native code] }] GET /books /books
+[function now() { [native code] }] GET /books /books
+[function now() { [native code] }] GET /books?search=nod /books
+[function now() { [native code] }] GET /books?search=postman /books
+[function now() { [native code] }] GET /books?search=postman /books
+[function now() { [native code] }] GET /books?search=postman /books
+[function now() { [native code] }] GET /books?search=nodejs /books
+[function now() { [native code] }] GET /books?search=nodjs /books
+[function now() { [native code] }] GET /books?search=nodjs /books
+[function now() { [native code] }] GET /books?search=postman /books
