@@ -2,6 +2,7 @@ import { booksTable } from '../models/book-model.js';
 import db from '../db/index.js';
 import { eq } from 'drizzle-orm';
 import { ilike } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 export const getAllBooks = async (req, res) => {
   const searchQuery = req.query.search;
   if (searchQuery) {
@@ -10,7 +11,9 @@ export const getAllBooks = async (req, res) => {
         const books = await db
           .select()
           .from(booksTable)
-          .where(ilike(booksTable.title, `%${searchQuery}%`));
+          .where(
+            sql`to_tsvector('english', ${booksTable.title}) @@ to_tsquery('english', ${searchQuery}) OR to_tsvector('english', ${booksTable.description}) @@ to_tsquery('english', ${searchQuery})`,
+          );
         if (books.length === 0) {
           res.status(404).json({
             message: `No books found matching the search query: ${searchQuery}`,
