@@ -69,3 +69,17 @@
 [function now() { [native code] }] PUT /authors/e501cd91-604f-47ca-b485-51f02412b714 /authors/e501cd91-604f-47ca-b485-51f02412b714
 [function now() { [native code] }] PUT /authors/e501cd91-604f-47ca-b485-51f02412b714 /authors/e501cd91-604f-47ca-b485-51f02412b714
 [function now() { [native code] }] GET /authors/ /authors/
+[function now() { [native code] }] GET /books?search=Nodejs /books
+[function now() { [native code] }] GET /books /books
+[function now() { [native code] }] POST /books /books
+[function now() { [native code] }] POST /authors /authors
+[function now() { [native code] }] GET /authors/ /authors/
+[function now() { [native code] }] POST /authors /authors
+[function now() { [native code] }] POST /books /books
+[function now() { [native code] }] GET /books /books
+[function now() { [native code] }] DELETE /authors/6bd8d7ed-42f5-4830-9903-8dbbad36ddc4 /authors/6bd8d7ed-42f5-4830-9903-8dbbad36ddc4
+[function now() { [native code] }] DELETE /books/6bd8d7ed-42f5-4830-9903-8dbbad36ddc4 /books/6bd8d7ed-42f5-4830-9903-8dbbad36ddc4
+[function now() { [native code] }] PUT /books/6bd8d7ed-42f5-4830-9903-8dbbad36ddc4 /books/6bd8d7ed-42f5-4830-9903-8dbbad36ddc4
+[function now() { [native code] }] PUT /books/4df51d45-4a41-4808-9e0a-150e7caf4ce6 /books/4df51d45-4a41-4808-9e0a-150e7caf4ce6
+[function now() { [native code] }] PUT /books/4df51d45-4a41-4808-9e0a-150e7caf4ce6 /books/4df51d45-4a41-4808-9e0a-150e7caf4ce6
+[function now() { [native code] }] GET /books /books

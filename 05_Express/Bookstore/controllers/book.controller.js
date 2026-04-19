@@ -112,3 +112,25 @@ export const deleteBook = async (req, res) => {
   }
 };
 
+export const updateBook = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedBook = await db
+      .update(booksTable)
+      .set(req.body)
+      .where(eq(booksTable.id, id))
+      .returning({ id: booksTable.id });
+    if (updatedBook.length === 0) {
+      return res
+        .status(404)
+        .json({ error: `Book with id:${id} does not exist!` });
+    } else {
+      return res
+        .status(200)
+        .json({ message: `Book with id:${id} updated successfully!` });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

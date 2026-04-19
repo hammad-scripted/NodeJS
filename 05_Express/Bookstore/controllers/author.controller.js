@@ -85,11 +85,13 @@ export const deleteAuthor = async (req, res) => {
 export const updateAuthor = async (req, res) => {
   try {
     const id = req.params.id;
+
     const updatedAuthor = await db
       .update(authorsTable)
       .set(req.body)
       .where(eq(authorsTable.id, id))
-      .returning();
+      .returning({ id: authorsTable.id });
+    // updateAuthor is an array
     if (updatedAuthor.length === 0) {
       return res
         .status(404)
