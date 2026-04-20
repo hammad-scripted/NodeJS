@@ -2,8 +2,8 @@ services:
   postgres:
     image: postgres:17.4
     ports:
-      - 8080:5432
+      - 8081:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_DB: mydatabase
