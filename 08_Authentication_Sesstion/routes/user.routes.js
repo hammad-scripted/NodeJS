@@ -1,6 +1,7 @@
 import express from 'express';
 import db from '../db/index.js';
 import { usersTable } from '../db/schema.js';
+import { userSession } from '../db/schema.js';
 import { randomBytes, createHmac } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 
@@ -80,9 +81,16 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
+    const session = await db
+      .insert(userSession)
+      .values({ userId: currentUser.id })
+
+      .returning();
+
     res.status(200).json({
       message: 'Login successful',
       user: currentUser.name,
+      sessionId: session[0].id,
     });
   } catch (error) {
     res.status(500).json({ message: 'Login failed', error });
