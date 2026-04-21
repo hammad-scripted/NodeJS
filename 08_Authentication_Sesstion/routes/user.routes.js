@@ -88,6 +88,7 @@ router.post('/login', async (req, res) => {
       userId: currentUser.id,
       name: currentUser.name,
       email: currentUser.email,
+      role: currentUser.role,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
@@ -96,6 +97,9 @@ router.post('/login', async (req, res) => {
       user: currentUser.name,
       sessionId: session[0].id,
       token: token,
+      role: currentUser.role,
+      email: currentUser.email,
+      age: currentUser.age,
     });
   } catch (error) {
     return res.status(500).json({ message: 'Login failed', error });
