@@ -1,11 +1,21 @@
-import { timestamp } from 'drizzle-orm/pg-core';
-import { integer, pgTable, varchar, text, uuid } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  pgTable,
+  varchar,
+  text,
+  uuid,
+  pgEnum,
+  timestamp,
+} from 'drizzle-orm/pg-core';
+
+export const userRoleEnum = pgEnum('user_role', ['USER', 'ADMIN']);
 
 export const usersTable = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar({ length: 255 }).notNull(),
   age: integer().notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
+  role: userRoleEnum().default('USER').notNull(),
   password: text().notNull(),
   salt: text().notNull(),
 });
