@@ -4,7 +4,7 @@ import { usersTable } from '../db/schema.js';
 import { userSession } from '../db/schema.js';
 import { randomBytes, createHmac } from 'node:crypto';
 import { eq } from 'drizzle-orm';
-
+import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 /* Helper function for hashing password */
@@ -80,16 +80,23 @@ router.post('/login', async (req, res) => {
     const session = await db
       .insert(userSession)
       .values({ userId: currentUser.id })
-
       .returning();
 
-    res.status(200).json({
+    const payload = {
+      userId: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+
+    return res.status(200).json({
       message: 'Login successful',
       user: currentUser.name,
       sessionId: session[0].id,
+      token: token,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Login failed', error });
+    return res.status(500).json({ message: 'Login failed', error });
   }
 });
 
