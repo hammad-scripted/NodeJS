@@ -7,10 +7,6 @@ import { eq } from 'drizzle-orm';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Testing');
-});
-
 /* Helper function for hashing password */
 function hashPassword(password, salt) {
   return createHmac('sha256', salt).update(password).digest('hex');
@@ -97,4 +93,24 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  const sessionId = req.headers['session-id'];
+  if (!sessionId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const currentSession = await db
+    .select({
+      id: userSession.id,
+      userId: userSession.userId,
+      name: usersTable.name,
+      email: usersTable.email,
+    })
+    .from(userSession)
+    .rightJoin(usersTable, eq(userSession.userId, usersTable.id))
+    .where(eq(userSession.id, sessionId));
+  if (currentSession.length === 0) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  res.status(200).json({ message: 'Authorized', data: currentSession[0] });
+});
 export default router;
