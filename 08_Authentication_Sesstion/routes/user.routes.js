@@ -5,6 +5,8 @@ import { userSession } from '../db/schema.js';
 import { randomBytes, createHmac } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
+import { ensureAuthenticated } from '../middlewares/auth.middleware.js';
+
 const router = express.Router();
 
 /* Helper function for hashing password */
@@ -100,29 +102,25 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
-  const user = req.user;
-  if (!user) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+router.get('/', ensureAuthenticated, async (req, res) => {
   return res.status(200).json({
     message: 'Authorized',
-    data: user,
+    data: req.user,
   });
 });
 
-router.patch('/', async (req, res) => {
-  const user = req.user;
-  if (!user) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+router.patch('/', ensureAuthenticated, async (req, res) => {
   const { name, email } = req.body;
-  await db
+  const updatedUser = await db
     .update(usersTable)
     .set({ name, email })
-    .where(eq(usersTable.id, user.id));
+    .where(eq(usersTable.id, req.user.userId))
+    .returning();
 
-  return res.json({ message: 'User updated successfully', data: user });
+  return res.json({
+    message: 'User updated successfully',
+    data: updatedUser[0],
+  });
 });
 
 export default router;
