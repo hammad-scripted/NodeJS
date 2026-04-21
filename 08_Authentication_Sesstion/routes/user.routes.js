@@ -94,23 +94,28 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const sessionId = req.headers['session-id'];
-  if (!sessionId) {
+  const user = req.user;
+  if (!user) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  const currentSession = await db
-    .select({
-      id: userSession.id,
-      userId: userSession.userId,
-      name: usersTable.name,
-      email: usersTable.email,
-    })
-    .from(userSession)
-    .rightJoin(usersTable, eq(userSession.userId, usersTable.id))
-    .where(eq(userSession.id, sessionId));
-  if (currentSession.length === 0) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  res.status(200).json({ message: 'Authorized', data: currentSession[0] });
+  return res.status(200).json({
+    message: 'Authorized',
+    data: user,
+  });
 });
+
+router.patch('/', async (req, res) => {
+  const user = req.user;
+  if (!user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const { name, email } = req.body;
+  await db
+    .update(usersTable)
+    .set({ name, email })
+    .where(eq(usersTable.id, user.id));
+
+  return res.json({ message: 'User updated successfully', data: user });
+});
+
 export default router;
