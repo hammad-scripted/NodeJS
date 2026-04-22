@@ -2,6 +2,7 @@ import express from 'express';
 import { User } from '../models/user.model.js';
 import { randomBytes, createHmac } from 'node:crypto';
 import jwt from 'jsonwebtoken';
+import { ensureAuthenticated } from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
@@ -21,6 +22,7 @@ router.post('/signup', async (req, res) => {
       password: hashedPassword,
       salt,
     });
+
     return res.status(201).json({
       message: 'User registered successfully',
       data: { id: user._id },
@@ -46,9 +48,30 @@ router.post('/login', async (req, res) => {
     .digest('hex');
   if (hashedPassword !== existingUser.password) {
     return res.status(400).json({
-      error: 'Invalid email or password',
+      error: 'Invalid password',
     });
   }
-  const payload = {};
+  const payload = {
+    name: existingUser.name,
+    _id: existingUser._id,
+    email: existingUser.email,
+  };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return res.status(200).json({
+    status: 'success',
+    token,
+  });
+});
+
+router.patch('/', ensureAuthenticated, async (req, res) => {
+  const { name, email } = req.body;
+  const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+    name,
+    email,
+  });
+  return res.status(200).json({
+    status: 'success',
+    data: updatedUser,
+  });
 });
 export default router;
